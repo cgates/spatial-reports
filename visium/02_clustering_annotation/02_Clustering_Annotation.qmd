@@ -2,30 +2,33 @@
 title: "Visium post-QC clustering and cell type annotation"
 author: "Harvard Chan Bioinformatics Core"
 date: "`r Sys.Date()`"
-output:
-   html_document:
-      code_folding: hide
-      df_print: paged
-      highlights: pygments
-      number_sections: false
-      self_contained: true
-      theme: default
-      toc: true
-      toc_float:
-         collapsed: true
-         smooth_scroll: true
+format:
+  html:
+    code-fold: true
+    code-tools: true
+    code-overflow: wrap
+    df-print: paged
+    highlight-style: pygments
+    number-sections: true
+    self-contained: true
+    theme: default
+    toc: true
+    toc-location: left
+    toc-expand: false
+    lightbox: true
+    page-layout: full
 params:
-  project_file: ./information.R
+  project_file: ../information.R
   results_dir: ./results
-  visium_postQCF: "01_qc.RDS"
-  scrna_refF: "allen_scRNAseq_ref_subset.qs"
+  visium_postQCF: "../visium.qs"
+  scrna_refF: "../allen_ref_subset.qs"
 ---
 
 This code is in this ![](https://img.shields.io/badge/status-draft-grey) revision.
 
 ```{r versioncheck, cache = FALSE, message = FALSE, warning=FALSE}
-library(rstudioapi)
-setwd(fs::path_dir(getSourceEditorContext()$path))
+# library(rstudioapi)
+# setwd(fs::path_dir(getSourceEditorContext()$path))
 stopifnot(R.version$major>= 4) # requires R4
 if (compareVersion(R.version$minor,"3.1")<0) warning("We recommend >= R4.3.1") 
 stopifnot(compareVersion(as.character(BiocManager::version()), "3.18")>=0)
@@ -33,7 +36,7 @@ stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.1")>=0)
 ```
 
 ```{r load_libraries, cache = FALSE, message = FALSE, warning=FALSE, echo=FALSE,}
-library(bcbioR)
+library(import)
 library(knitr)
 # analysis-specific package
 library(Seurat)
@@ -43,7 +46,7 @@ library(quadprog)
 library(spacexr)
 # General data-wrangling 
 library(glue)
-library(qs)
+library(qs2)
 library(tidyverse)
 # Plotting
 library(patchwork)
@@ -86,7 +89,7 @@ inputRead <- function(f){
   if(sum(endsWith(f,c("rds","RDS")))>0){
     return(readRDS(f))
   }else if(sum(endsWith(f,c("qs","QS")))>0){
-     return(qread(f))
+     return(qs_read(f))
   }else{
     print("Check file extension and choose appropriate functions!")
   }
@@ -346,7 +349,7 @@ ROI <- ProjectData(
 )
 ```
 
-We can see that the excitatory neurons are located in layers at varying cortical depths, as expected
+We can see that the excitatory neurons (`L.* CTX`) are located in layers at varying cortical depths, as expected
 
 ```{r visualize labels}
 

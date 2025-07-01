@@ -1,3 +1,6 @@
 install.packages("BiocManager")
 BiocManager::install("renv")
 BiocManager::install(renv::dependencies(path = ".")[["Package"]])
+BiocManager::install("dmcable/spacexr")
+BiocManager::install("prabhakarlab/Banksy")
+BiocManager::install("satijalab/seurat-wrappers")

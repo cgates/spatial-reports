@@ -12,26 +12,37 @@ Templates with ![](https://img.shields.io/badge/status-draft-grey) revision indi
 
 ## Quick Start
 
-### With Rstudio
+This repository contains templates for COSMX and Visium[HD] data. Inside each folder you will find the different analyses we have available now.
+
+### Install Dependencies with Rstudio
 
 ```
-source(install_depedencies.R)
+source("install_depedencies.R")
+```
+### Install Test Data with Rstudio
+
+**Visium HD**
+
+This script will download the [test data](https://zenodo.org/records/15784846) needed for the visium reports.
+
+```
+source("visium/download-test-data.R")
 ```
 
 ## Downstream analysis
 
-Before using any template:
-1. **Modify** [information.R](information.R) with the right information. You can use this file with any template to include the project/analysis information.
-2. **Modify** *params.R* with the locations of select files/folders from the output of [nf-core/chipseq](https://nf-co.re/chipseq/2.1.0/docs/output). These nf-core outputs will become inputs to various templates.
-3. **Modify** the `YAML` header of the `Rmd` files to choose the right parameters for that report.
+Before using any template, go the `VISUM` or `COSMX` folder and:
 
-Additional useful info:
-- `params*example.R` are files containing parameters pointing to a small, simple dataset that can be used to test the report code and see how the fully rendered report looks.
+1. **Modify** [information.R](information.R) with the right information. You can use this file with any template to include the project/analysis information.
+2. **Modify** the `YAML` header of the `qmd` files to choose the right parameters for that report.
+
+- For Visium, we work from Seurat objects.
 
 ### Quality assessment
 
-![](https://img.shields.io/badge/status-draft-grey) [cosmx/01_quality_assessment/qc.Rmd](cosmx/01_quality_assessment/qc.Rmd) is a template for QC metrics.
-![](https://img.shields.io/badge/status-draft-grey) [visium/01_quality_assessment/qc.Rmd](cosmx/01_quality_assessment/qc.Rmd) is a template for QC metrics.
+![](https://img.shields.io/badge/status-draft-grey) [cosmx/01_quality_assessment/qc.Rmd](cosmx/01_quality_assessment/qc.Rmd) is a template for **COSMX** QC metrics.
+
+![](https://img.shields.io/badge/status-draft-grey) [visium/01_quality_assessment/qc.Rmd](cosmx/01_quality_assessment/quality_assessment.qmd) is a template for **Visium[HD]** QC metrics.
 
 ### Clustering and Annotation
 
