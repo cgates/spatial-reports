@@ -1,6 +1,5 @@
 # Set working directory to this folder directory
-library(rstudioapi)
-setwd(fs::path_dir(getSourceEditorContext()$path))
+setwd("visium")
 
 library(curl)
 # Optional: increase timeout (default is 60 sec, here set to 300 sec = 5 min)
