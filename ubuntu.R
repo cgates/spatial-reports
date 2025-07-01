@@ -8,4 +8,4 @@ options(BIOCONDUCTOR_CONFIG_FILE = "https://packagemanager.posit.co/bioconductor
 Sys.setenv("R_BIOC_VERSION" = "3.22")
 
 # Configure a CRAN snapshot compatible with Bioconductor 3.22
-options(repos = c(CRAN = "https://packagemanager.posit.co/cran/__linux__/noble/latest"))
+options(repos = c(CRAN = "https://packagemanager.posit.co/cran/__linux__/jammy/latest"))

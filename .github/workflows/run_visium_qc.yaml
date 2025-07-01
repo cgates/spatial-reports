@@ -8,7 +8,7 @@ on:
 
 jobs:
   r-visum-qc:
-    runs-on: ubuntu-noble
+    runs-on: ubuntu-22.04
 
     env:
       RENV_PATHS_ROOT: ~/.local/share/renv  # persistent cache location
