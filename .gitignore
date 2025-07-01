@@ -5,3 +5,6 @@
 **rds
 **html
 *results*
+# pixi environments
+.pixi
+*.egg-info
