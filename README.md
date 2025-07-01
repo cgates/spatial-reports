@@ -42,8 +42,8 @@ Before using any template, go the `VISUM` or `COSMX` folder and:
 
 ![](https://img.shields.io/badge/status-draft-grey) [cosmx/01_quality_assessment/qc.Rmd](cosmx/01_quality_assessment/qc.Rmd) is a template for **COSMX** QC metrics.
 
-![](https://img.shields.io/badge/status-draft-grey) [visium/01_quality_assessment/qc.Rmd](cosmx/01_quality_assessment/quality_assessment.qmd) is a template for **Visium[HD]** QC metrics.
+![](https://img.shields.io/badge/status-draft-grey) [visium/01_quality_assessment/qc.Rmd](cosmx/01_quality_assessment/quality_assessment.qmd) is a template for **Visium[HD]** QC metrics. [See an example](https://bcbio.github.io/spatial-reports/visium/01_quality_assessment/qc.html).
 
 ### Clustering and Annotation
 
-![](https://img.shields.io/badge/status-draft-grey) [visium/02_clustering_annotation/02_Clustering_Annotation.rmd](visium/02_clustering_annotation/02_Clustering_Annotation.rmd) is a template for clustering and annotation with Seurat and [Banksy](https://github.com/prabhakarlab/Banksy) (clustering spatial omics data) and [spacexr](https://github.com/dmcable/spacexr) (cell type identification and cell type-specific differential expression in spatial transcriptomics).
+![](https://img.shields.io/badge/status-draft-grey) [visium/02_clustering_annotation/02_Clustering_Annotation.rmd](visium/02_clustering_annotation/02_Clustering_Annotation.rmd) is a template for clustering and annotation with Seurat and [Banksy](https://github.com/prabhakarlab/Banksy) (clustering spatial omics data) and [spacexr](https://github.com/dmcable/spacexr) (cell type identification and cell type-specific differential expression in spatial transcriptomics). [See an example](https://bcbio.github.io/spatial-reports/visium/02_clustering_annotation/02_Clustering_Annotation.html).
