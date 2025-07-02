@@ -42,7 +42,7 @@ Before using any template, go the `VISUM` or `COSMX` folder and:
 
 ![](https://img.shields.io/badge/status-draft-grey) [cosmx/01_quality_assessment/qc.Rmd](cosmx/01_quality_assessment/qc.Rmd) is a template for **COSMX** QC metrics.
 
-![](https://img.shields.io/badge/status-draft-grey) [visium/01_quality_assessment/qc.Rmd](cosmx/01_quality_assessment/quality_assessment.qmd) is a template for **Visium[HD]** QC metrics. [See an example](https://bcbio.github.io/spatial-reports/visium/01_quality_assessment/qc.html).
+![](https://img.shields.io/badge/status-draft-grey) [visium/01_quality_assessment/qc.Rmd](cosmx/01_quality_assessment/quality_assessment.qmd) is a template for **Visium[HD]** QC metrics. [See an example](https://bcbio.github.io/spatial-reports/visium/01_quality_assessment/quality_assessment.html).
 
 ### Clustering and Annotation
 
