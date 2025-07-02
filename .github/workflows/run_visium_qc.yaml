@@ -45,6 +45,9 @@ jobs:
 
       - name: Get data
         run: Rscript visium/download-test-data.R
-
-      - name: Run visium quality assessment
-        run: Rscript visium/01_quality_assessment/quality_assessment.qmd
+     
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+     
+      - name: Run quality assessment
+        run: quarto render visium/01_quality_assessment/quality_assessment.qmd
