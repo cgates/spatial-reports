@@ -55,13 +55,7 @@ jobs:
      
       - name: Run quality assessment
         id: render_qmd
-        run: |
-          if git diff --quiet origin/main -- visium/01_quality_assessment/quality_assessment.qmd; then
-            echo "No changes in quality_assessment.qmd. Skipping render."
-            exit 0
-          else
-            quarto render visium/01_quality_assessment/quality_assessment.qmd
-          fi
+        run: quarto render visium/01_quality_assessment/quality_assessment.qmd
         shell: bash
 
       - name: Deploy HTML to gh-pages
