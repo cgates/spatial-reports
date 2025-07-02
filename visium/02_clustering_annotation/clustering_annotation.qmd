@@ -29,10 +29,10 @@ This code is in this ![](https://img.shields.io/badge/status-alpha-yellow) revis
 ```{r versioncheck, cache = FALSE, message = FALSE, warning=FALSE}
 # library(rstudioapi)
 # setwd(fs::path_dir(getSourceEditorContext()$path))
-stopifnot(R.version$major>= 4) # requires R4
-if (compareVersion(R.version$minor,"3.1")<0) warning("We recommend >= R4.3.1") 
-stopifnot(compareVersion(as.character(BiocManager::version()), "3.18")>=0)
-stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.1")>=0)
+stopifnot(R.version$major >= 4) # requires R4
+if (compareVersion(R.version$minor, "3.1") < 0) warning("We recommend >= R4.3.1")
+stopifnot(compareVersion(as.character(BiocManager::version()), "3.18") >= 0)
+stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.1") >= 0)
 ```
 
 ```{r load_libraries, cache = FALSE, message = FALSE, warning=FALSE, echo=FALSE,}
@@ -44,7 +44,7 @@ library(SeuratWrappers)
 library(Banksy)
 library(quadprog)
 library(spacexr)
-# General data-wrangling 
+# General data-wrangling
 library(glue)
 library(qs2)
 library(tidyverse)
@@ -53,44 +53,50 @@ library(patchwork)
 library(ggprism)
 
 
-import::from(magrittr,set_colnames,set_rownames,"%<>%")
-invisible(list2env(params,environment()))
+import::from(magrittr, set_colnames, set_rownames, "%<>%")
+invisible(list2env(params, environment()))
 source(project_file)
 
 ggplot2::theme_set(theme_prism(base_size = 12))
 # https://grafify-vignettes.netlify.app/colour_palettes.html
 # NOTE change colors here if you wish
-scale_colour_discrete <- function(...)
-  scale_colour_manual(..., 
-                      values = as.vector(grafify:::graf_palettes[["kelly"]]))
-scale_fill_discrete <- function(...)
-  scale_fill_manual(..., 
-                      values = as.vector(grafify:::graf_palettes[["kelly"]]))
+scale_colour_discrete <- function(...) {
+  scale_colour_manual(...,
+    values = as.vector(grafify:::graf_palettes[["kelly"]])
+  )
+}
+scale_fill_discrete <- function(...) {
+  scale_fill_manual(...,
+    values = as.vector(grafify:::graf_palettes[["kelly"]])
+  )
+}
 
 opts_chunk[["set"]](
-    cache = F,
-    cache.lazy = FALSE,
-    dev = c("png", "pdf"),
-    error = TRUE,
-    highlight = TRUE,
-    message = FALSE,
-    prompt = FALSE,
-    tidy = FALSE,
-    warning = FALSE,
-    echo = T, 
-    fig.height = 4)
+  cache = F,
+  cache.lazy = FALSE,
+  dev = c("png", "pdf"),
+  error = TRUE,
+  highlight = TRUE,
+  message = FALSE,
+  prompt = FALSE,
+  tidy = FALSE,
+  warning = FALSE,
+  echo = T,
+  fig.height = 4)
 
 # set seed for reproducibility
 set.seed(1234567890L)
-options(future.globals.maxSize= 2000000000)
+options(future.globals.maxSize = 2000000000)
 
-inputRead <- function(f){
-  if(R.utils::isUrl(f)){f <- url(f)}
-  if(sum(endsWith(f,c("rds","RDS")))>0){
+inputRead <- function(f) {
+  if (R.utils::isUrl(f)) {
+    f <- url(f)
+  }
+  if (sum(endsWith(f, c("rds", "RDS"))) > 0) {
     return(readRDS(f))
-  }else if(sum(endsWith(f,c("qs","QS")))>0){
-     return(qs_read(f))
-  }else{
+  } else if (sum(endsWith(f, c("qs", "QS"))) > 0) {
+    return(qs_read(f))
+  } else {
     print("Check file extension and choose appropriate functions!")
   }
 }
@@ -105,7 +111,7 @@ inputRead <- function(f){
 -   Aim: `r aim`
 
 
-In this template, we assume you have already run QC on your visium data:
+In this template, we assume you have already run QC on your Visium data:
 
 - Remove genes that are contamination/poor quality-related (e.g. mitochondria or hemoglobin); 
 - Keep only cells that have all QC metrics passing the chosen thresholds
@@ -123,8 +129,10 @@ Normalization is important in order to make expression counts comparable across 
 ```{r normalize}
 visiumHD_postQCobj <- inputRead(visium_postQCF)
 assaytouse <- DefaultAssay(visiumHD_postQCobj)
-message("Default assay: [",assaytouse,
-        "] used, please change it if another assay is of interest.")
+message(
+  "Default assay: [", assaytouse,
+  "] used, please change it if another assay is of interest."
+)
 object_filt <- NormalizeData(visiumHD_postQCobj, assay = assaytouse)
 ```
 
@@ -144,7 +152,6 @@ object_filt <- SketchData(
   method = "LeverageScore",
   sketched.assay = "sketch"
 )
-
 ```
 
 ```{r perform sketched clustering}
@@ -156,16 +163,22 @@ object_filt <- FindVariableFeatures(object_filt)
 object_filt <- ScaleData(object_filt)
 object_filt <- RunPCA(object_filt, assay = "sketch", reduction.name = "pca.sketch")
 # default first 50 PCs are used
-object_filt <- FindNeighbors(object_filt, assay = "sketch", 
-                             reduction = "pca.sketch", 
-                             dims = 1:50)
+object_filt <- FindNeighbors(object_filt,
+  assay = "sketch",
+  reduction = "pca.sketch",
+  dims = 1:50
+)
 # you may want to tweak resolution parameter in your own data
-object_filt <- FindClusters(object_filt, cluster.name = "seurat_cluster.sketched", 
-                            resolution = .65)
+object_filt <- FindClusters(object_filt,
+  cluster.name = "seurat_cluster.sketched",
+  resolution = .65
+)
 # Use the same dimension of PCs for both FindNeighbors and run UMAP
-object_filt <- RunUMAP(object_filt, reduction = "pca.sketch", 
-                       reduction.name = "umap.sketch", return.model = T, 
-                       dims = 1:50)
+object_filt <- RunUMAP(object_filt,
+  reduction = "pca.sketch",
+  reduction.name = "umap.sketch", return.model = T,
+  dims = 1:50
+)
 ```
 
 ```{r project clusters}
@@ -179,42 +192,46 @@ object_filt <- ProjectData(
   dims = 1:50,
   refdata = list(seurat_cluster.projected = "seurat_cluster.sketched")
 )
-
 ```
 
 ```{r visualize clusters,fig.height = 5,fig.width = 10}
-object_filt$seurat_cluster.projected <- object_filt$seurat_cluster.projected %>% 
-  as.numeric %>% as.factor()
+object_filt$seurat_cluster.projected <- object_filt$seurat_cluster.projected %>%
+  as.numeric() %>%
+  as.factor()
 
 DefaultAssay(object_filt) <- "sketch"
 Idents(object_filt) <- "seurat_cluster.sketched"
-p1 <- DimPlot(object_filt, reduction = "umap.sketch", label = F, cols = 'polychrome') + 
-  ggtitle("Sketched clustering") + 
-  theme(legend.position = "bottom")+  
-  guides(color = guide_legend(override.aes = list(size=4), ncol=5) )
+p1 <- DimPlot(object_filt, reduction = "umap.sketch", label = F, cols = "polychrome") +
+  ggtitle("Sketched clustering") +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(override.aes = list(size = 4), ncol = 5))
 
 # switch to full dataset
 DefaultAssay(object_filt) <- assaytouse
 Idents(object_filt) <- "seurat_cluster.projected"
-p2 <- DimPlot(object_filt, reduction = "full.umap.sketch", label = F, raster = F, 
-              cols = 'polychrome') +
-  ggtitle("Projected clustering") + 
-  theme(legend.position = "bottom")+  
-  guides(color = guide_legend(override.aes = list(size=4), ncol=5) )
+p2 <- DimPlot(object_filt,
+  reduction = "full.umap.sketch", label = F, raster = F,
+  cols = "polychrome"
+) +
+  ggtitle("Projected clustering") +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(override.aes = list(size = 4), ncol = 5))
 
 p1 | p2
 ```
 
 ```{r visualize clusters on image}
-
-color_pal = Seurat::DiscretePalette(n = length(unique(object_filt$seurat_cluster.projected)),
-                                    palette = "polychrome")
+color_pal <- Seurat::DiscretePalette(
+  n = length(unique(object_filt$seurat_cluster.projected)),
+  palette = "polychrome"
+)
 names(color_pal) <- sort(unique(object_filt$seurat_cluster.projected))
-image_seurat_clusters <- SpatialDimPlot(object_filt, 
-                                        group.by = 'seurat_cluster.projected', 
-                                        pt.size.factor = 8, cols = color_pal) + 
-  theme(legend.position = "bottom",legend.title=element_blank())+  
-  guides(fill = guide_legend(override.aes = list(size=4,name=""), ncol=5) )
+image_seurat_clusters <- SpatialDimPlot(object_filt,
+  group.by = "seurat_cluster.projected",
+  pt.size.factor = 8, cols = color_pal
+) +
+  theme(legend.position = "bottom", legend.title = element_blank()) +
+  guides(fill = guide_legend(override.aes = list(size = 4, name = ""), ncol = 5))
 
 image_seurat_clusters
 ```
@@ -231,34 +248,43 @@ Unlike Seurat, BANKSY takes into account not only an individual spot’s express
 
 # Please consider tweaking those two parameters based on your understanding of your data
 
-object_filt <- RunBanksy(object_filt, lambda = 0.8, verbose = T,
-                         assay = assaytouse, slot = 'data', k_geom = 50)
-object_filt <- RunPCA(object_filt, assay = "BANKSY", 
-                      reduction.name = "pca.banksy", 
-                      features = rownames(object_filt), 
-                      npcs = 30)
-object_filt <- FindNeighbors(object_filt, 
-                             reduction = "pca.banksy", 
-                             dims = 1:30)
+object_filt <- RunBanksy(object_filt,
+  lambda = 0.8, verbose = T,
+  assay = assaytouse, slot = "data", k_geom = 50
+)
+object_filt <- RunPCA(object_filt,
+  assay = "BANKSY",
+  reduction.name = "pca.banksy",
+  features = rownames(object_filt),
+  npcs = 30
+)
+object_filt <- FindNeighbors(object_filt,
+  reduction = "pca.banksy",
+  dims = 1:30
+)
 # again, do not forget to try different resolutions
-object_filt <- FindClusters(object_filt, cluster.name = "banksy_cluster",
-                            resolution = 0.5)
+object_filt <- FindClusters(object_filt,
+  cluster.name = "banksy_cluster",
+  resolution = 0.5
+)
 ```
 
 ```{r}
-color_pal = Seurat::DiscretePalette(n = length(unique(object_filt$banksy_cluster)),
-                                    palette = "polychrome")
+color_pal <- Seurat::DiscretePalette(
+  n = length(unique(object_filt$banksy_cluster)),
+  palette = "polychrome"
+)
 names(color_pal) <- sort(unique(object_filt$banksy_cluster))
 
-image_banksy_clusters <- SpatialDimPlot(object_filt, 
-                                        group.by = "banksy_cluster", 
-                                        pt.size.factor = 7,
-               cols = color_pal)+ 
-  theme(legend.position = "bottom",legend.title=element_blank())+  
-  guides(fill = guide_legend(override.aes = list(size=4,name=""), ncol=5) )
+image_banksy_clusters <- SpatialDimPlot(object_filt,
+  group.by = "banksy_cluster",
+  pt.size.factor = 7,
+  cols = color_pal
+) +
+  theme(legend.position = "bottom", legend.title = element_blank()) +
+  guides(fill = guide_legend(override.aes = list(size = 4, name = ""), ncol = 5))
 
 image_seurat_clusters | image_banksy_clusters
-
 ```
 
 # Cell Type Annotation 
@@ -271,13 +297,17 @@ We first subset our Seurat object to this region of interest.
 # change the list of clusters to your interest regions based on previous clustering results
 ROI <- subset(object_filt, seurat_cluster.projected %in% c(18, 19, 7, 2, 4))
 
-color_pal = Seurat::DiscretePalette(n = length(unique(object_filt$seurat_cluster.projected)),
-                                    palette = "polychrome")
+color_pal <- Seurat::DiscretePalette(
+  n = length(unique(object_filt$seurat_cluster.projected)),
+  palette = "polychrome"
+)
 names(color_pal) <- sort(unique(object_filt$seurat_cluster.projected))
-SpatialDimPlot(ROI, group.by = 'seurat_cluster.projected', 
-               pt.size.factor = 8, cols = color_pal)+ 
-  theme(legend.position = "bottom",legend.title=element_blank())+  
-  guides(fill = guide_legend(override.aes = list(size=4,name=""), ncol=5) )
+SpatialDimPlot(ROI,
+  group.by = "seurat_cluster.projected",
+  pt.size.factor = 8, cols = color_pal
+) +
+  theme(legend.position = "bottom", legend.title = element_blank()) +
+  guides(fill = guide_legend(override.aes = list(size = 4, name = ""), ncol = 5))
 ```
 
 To perform accurate annotation of cell types, we must also take into consideration that our 16 um spots may contain one or more cells each. The method Robust Cell Type Deconvolution (**RCTD**) has been shown to accurately annotate spatial data from a variety of technologies while taking into consideration that a single spot may exhibit multiple cell type profiles.
@@ -322,7 +352,6 @@ cluster <- droplevels(cluster)
 
 # create the RCTD reference object
 reference <- Reference(counts, cluster, nUMI)
-
 ```
 
 ```{r run RCTD}
@@ -331,7 +360,6 @@ RCTD <- run.RCTD(RCTD, doublet_mode = "doublet") # this command takes ~15 mins t
 
 # add results back to Seurat object
 ROI <- AddMetaData(ROI, metadata = RCTD@results$results_df)
-
 ```
 
 ```{r project to all cortical cells}
@@ -352,14 +380,15 @@ ROI <- ProjectData(
 We can see that the excitatory neurons (`L.* CTX`) are located in layers at varying cortical depths, as expected
 
 ```{r visualize labels}
-
 Idents(ROI) <- "full_first_type"
 cells <- CellsByIdentities(ROI)
 # Layered (starts with L), excitatory neurons in the ROI
 excitatory_names <- sort(grep("^L.* CTX", names(cells), value = TRUE))
-SpatialDimPlot(ROI, cells.highlight = cells[excitatory_names], 
-               cols.highlight = c("#FFFF00", "grey50"), facet.highlight = T, 
-               combine = T, ncol = 4, pt.size.factor = 8)
+SpatialDimPlot(ROI,
+  cells.highlight = cells[excitatory_names],
+  cols.highlight = c("#FFFF00", "grey50"), facet.highlight = T,
+  combine = T, ncol = 4, pt.size.factor = 8
+)
 ```
 
 
