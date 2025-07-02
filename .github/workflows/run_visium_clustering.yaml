@@ -57,7 +57,9 @@ jobs:
      
       - name: Run clustering and annotation
         id: render_qmd
-        run: quarto render visium/02_clustering_annotation/clustering_annotation.qmd
+        run: |
+          cd visium/02_clustering_annotation/
+          quarto render clustering_annotation.qmd
         shell: bash
 
       - name: Deploy HTML to gh-pages
