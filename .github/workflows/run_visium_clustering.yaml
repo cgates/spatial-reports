@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'visium/02_clustering_annotation/02_clustering_annotation.qmd'
+      - 'visium/02_clustering_annotation/clustering_annotation.qmd'
   pull_request:
     branches: [main]
     paths:
-      - 'visium/02_clustering_annotation/02_clustering_annotation.qmd'
+      - 'visium/02_clustering_annotation/clustering_annotation.qmd'
 
 jobs:
   r-visium-clustering:
