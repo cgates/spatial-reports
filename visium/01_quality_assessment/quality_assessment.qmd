@@ -25,7 +25,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-This code is in this ![](https://img.shields.io/badge/status-draft-grey) revision.
+This code is in this ![](https://img.shields.io/badge/status-alpha-yellow) revision.
 
 ## Visium Description
 

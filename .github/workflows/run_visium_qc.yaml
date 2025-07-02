@@ -3,8 +3,12 @@ name: Visium Quality Control
 on:
   push:
     branches: [main]
+    paths:
+      - 'visium/01_quality_assessment/quality_assessment.qmd'
   pull_request:
     branches: [main]
+    paths:
+      - 'visium/01_quality_assessment/quality_assessment.qmd'
 
 jobs:
   r-visum-qc:
@@ -67,7 +71,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin gh-pages || git checkout --orphan gh-pages
           git switch gh-pages || git checkout -b gh-pages
-          mkdir -p visium/01_quality_assessment
+          # mkdir -p visium/01_quality_assessment
           # cp visium/01_quality_assessment/quality_assessment.html visium/01_quality_assessment/
           git add visium/01_quality_assessment/quality_assessment.html
           git commit -m "Deploy quality_assessment.html [skip ci]" || echo "No changes to commit"

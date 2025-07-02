@@ -24,7 +24,7 @@ params:
   scrna_refF: "../allen_ref_subset.qs"
 ---
 
-This code is in this ![](https://img.shields.io/badge/status-draft-grey) revision.
+This code is in this ![](https://img.shields.io/badge/status-alpha-yellow) revision.
 
 ```{r versioncheck, cache = FALSE, message = FALSE, warning=FALSE}
 # library(rstudioapi)

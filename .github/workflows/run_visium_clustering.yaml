@@ -3,8 +3,12 @@ name: Visium Clustering and Annotation
 on:
   push:
     branches: [main]
+    paths:
+      - 'visium/02_clustering_annotation/02_clustering_annotation.qmd'
   pull_request:
     branches: [main]
+    paths:
+      - 'visium/02_clustering_annotation/02_clustering_annotation.qmd'
 
 jobs:
   r-visium-clustering:
@@ -53,13 +57,7 @@ jobs:
      
       - name: Run clustering and annotation
         id: render_qmd
-        run: |
-          if git diff --quiet origin/main -- visium/02_clustering_annotation/02_clustering_annotation.qmd; then
-            echo "No changes in 02_clustering_annotation.qmd. Skipping render."
-            exit 0
-          else
-            quarto render visium/02_clustering_annotation/02_clustering_annotation.qmd
-          fi
+        run: quarto render visium/02_clustering_annotation/clustering_annotation.qmd
         shell: bash
 
       - name: Deploy HTML to gh-pages
@@ -71,7 +69,7 @@ jobs:
           git switch gh-pages || git checkout -b gh-pages
           # mkdir -p visium/02_clustering_annotation
           # cp visium/02_clustering_annotation/02_clustering_annotation.html visium/02_clustering_annotation/
-          git add visium/02_clustering_annotation/02_clustering_annotation.html
-          git commit -m "Deploy 02_clustering_annotation.html [skip ci]" || echo "No changes to commit"
+          git add visium/02_clustering_annotation/clustering_annotation.html
+          git commit -m "Deploy clustering_annotation.html [skip ci]" || echo "No changes to commit"
           git push origin gh-pages
         shell: bash
