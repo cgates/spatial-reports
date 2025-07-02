@@ -51,3 +51,17 @@ jobs:
      
       - name: Run quality assessment
         run: quarto render visium/01_quality_assessment/quality_assessment.qmd
+
+      - name: Deploy HTML to gh-pages
+        if: success()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin gh-pages || git checkout --orphan gh-pages
+          git switch gh-pages || git checkout -b gh-pages
+          mkdir -p visium/01_quality_assessment
+          # cp visium/01_quality_assessment/quality_assessment.html visium/01_quality_assessment/
+          git add visium/01_quality_assessment/quality_assessment.html
+          git commit -m "Deploy quality_assessment.html [skip ci]" || echo "No changes to commit"
+          git push origin gh-pages
+        shell: bash
