@@ -17,7 +17,7 @@ This repository contains templates for COSMX and Visium[HD] data. Inside each fo
 ### Install Dependencies with Rstudio
 
 ```
-source("install_depedencies.R")
+source("install_dependencies.R")
 ```
 ### Install Test Data with Rstudio
 
